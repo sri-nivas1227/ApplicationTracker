@@ -10,6 +10,19 @@
   --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
+  --font-family-display: "Satoshi", "sans-serif";
+  --breakpoint-3xl: 1920px;
+  --color-*: initial;
+
+  --color-steel-blue: #4682b4;
+  --color-dark-blue: #002d72;
+  --color-soft-black: #121212;
+  --color-dark-gray: #222222;
+  --color-eerie-black: #191919;
+  --color-light-gray: #b0b0b0;
+  --color-light-mode-bg: #e8f4ff;
+  --color-light-blue: #87cefa;
+  --color-light-cream: #fffff6;
 }
 
 @media (prefers-color-scheme: dark) {
