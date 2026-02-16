@@ -7,6 +7,11 @@ import formData from "@/app/tempResources/ApplicationTrackerForm.json";
 import InputTypes from "@/app/components/InputTypes";
 import { deleteApplicationAction, submitApplicationAction } from "../actions";
 
+type ApplicationData = {
+  id?: number;
+  [key: string]: any;
+};
+
 export default function DetailModal({
   application,
   setShowModal,
@@ -16,7 +21,7 @@ export default function DetailModal({
   userId,
   setSelectedApplication,
 }: {
-  application: object;
+  application: ApplicationData;
   setShowModal: Dispatch<SetStateAction<boolean | undefined>>;
   modalAction: "create" | "edit" | "view" | undefined;
   setModalAction: (value: "create" | "edit" | "view" | undefined) => void;

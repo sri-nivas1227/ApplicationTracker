@@ -1,4 +1,5 @@
 type Application = {
+  id?: number;
   role: string;
   company: string;
   job_link: string;
@@ -7,11 +8,13 @@ type Application = {
   contact_email: string;
   contact_phone: string;
   status: string;
+  [key: string]: any;
 };
 
 export async function submitApplicationAction(application: Application) {
-  const applications: [any] = localStorage.getItem("applications")
-    ? JSON.parse(localStorage.getItem("applications") ?? "")
+  const applicationsData = localStorage.getItem("applications");
+  const applications: any[] = applicationsData
+    ? JSON.parse(applicationsData)
     : [];
 
   const oldId = applications.at(-1)?.id ?? 0;
@@ -29,8 +32,9 @@ export async function submitApplicationAction(application: Application) {
 }
 
 export function getAllApplicationsAction() {
-  const applications = localStorage.getItem("applications")
-    ? JSON.parse(localStorage.getItem("applications"))
+  const applicationsData = localStorage.getItem("applications");
+  const applications = applicationsData
+    ? JSON.parse(applicationsData)
     : [];
   if (applications) {
     return applications;
@@ -39,11 +43,12 @@ export function getAllApplicationsAction() {
   }
 }
 
-export function deleteApplicationAction(id: Int32Array) {
-  let applications: [any] = JSON.parse(localStorage.getItem("applications"));
+export function deleteApplicationAction(id: number | undefined) {
+  const applicationsData = localStorage.getItem("applications");
+  let applications: any[] = applicationsData ? JSON.parse(applicationsData) : [];
   applications = applications.filter((application) => {
     return application["id"] != id;
   });
-  localStorage.setItem("applications", applications);
+  localStorage.setItem("applications", JSON.stringify(applications));
   return { success: true };
 }
