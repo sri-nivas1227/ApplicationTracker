@@ -2,10 +2,10 @@ import Image from "next/image";
 import Link from "next/link";
 import crossIcon from "@/app/assets/icons/cross-icon.svg";
 import deleteIcon from "@/app/assets/icons/delete-icon-red.svg";
-import { useState } from "react";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import formData from "@/app/tempResources/ApplicationTrackerForm.json";
 import InputTypes from "@/app/components/InputTypes";
-import { submitApplicationAction } from "../actions";
+import { deleteApplicationAction, submitApplicationAction } from "../actions";
 
 export default function DetailModal({
   application,
@@ -16,8 +16,8 @@ export default function DetailModal({
   userId,
   setSelectedApplication,
 }: {
-  application: any;
-  setShowModal: (arg: any) => void;
+  application: object;
+  setShowModal: Dispatch<SetStateAction<boolean | undefined>>;
   modalAction: "create" | "edit" | "view" | undefined;
   setModalAction: (value: "create" | "edit" | "view" | undefined) => void;
   toast: any;
@@ -29,7 +29,7 @@ export default function DetailModal({
       return {
         key: item.key,
         type: item.type,
-        value: "",
+        value: application?.[item.key] ?? "",
         required: item.required,
         editable: item.editable,
         label: item.label,
@@ -38,9 +38,8 @@ export default function DetailModal({
     }),
   );
   const handleModalClose = () => {
-    setShowModal((prev: boolean) => !prev);
+    setShowModal((prev) => !prev);
   };
-  console.log(application);
   const handleInputChange = (key: string, value: string) => {
     const newForm = applicationForm.map((item) => {
       if (item.key === key) {
@@ -51,16 +50,26 @@ export default function DetailModal({
     setApplicationForm(newForm);
   };
   const handleDeleteApplication = () => {
-    console.log("delete this one");
+    console.log('deleting application');
+    const response = deleteApplicationAction(application["id"])
+    if(response.success){
+      setShowModal(prev=>!prev)
+    }
+
+
   };
   const handleSaveApplication = async () => {
     const submitForm: any = {};
     applicationForm.forEach((obj)=>{
       submitForm[obj.key] = obj.value;
     })
-    console.log(submitForm);
+    if(application?.id){
+      submitForm["id"] = application.id;
+    }
     const response = await submitApplicationAction(submitForm);
-    
+    if(response.success){
+      setShowModal((prev)=>!prev)
+    }
   };
   return (
     <div className=" fixed inset-0 bg-dark-gray bg-opacity-20 overflow-y-auto h-full w-full flex items-center justify-center">
@@ -183,7 +192,7 @@ export default function DetailModal({
         <div className="flex justify-between items-center">
           <div
             onClick={handleDeleteApplication}
-            className="bg-red-500 bg-opacity-30 p-2 rounded-lg cursor-pointer"
+            className="bg-red-500 bg-opacity-30 p-2 border rounded-lg cursor-pointer"
           >
             <Image src={deleteIcon} alt="delete icon" className="w-8" />
           </div>

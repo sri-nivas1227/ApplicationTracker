@@ -21,6 +21,13 @@
     "editable": true
   },
   {
+    "label": "Job Location",
+    "type": "text",
+    "key": "location",
+    "required": false,
+    "editable": true
+  },
+  {
     "label": "Date Applied",
     "type": "date",
     "key": "date_applied",

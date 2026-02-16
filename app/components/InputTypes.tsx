@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { ChangeEvent, useEffect, useState } from "react";
 
 type inputType = {
   inputType: string;
@@ -44,14 +44,23 @@ const InputTypes = ({
     );
   }
   if (inputType === "dropdown") {
-    useEffect(() => {
-      onInputValueChange(inputKey, options[0].value);
-    }, []);
+    const [optionSelected, setOptionSelected] = useState(
+      existingValue ?? options[0].value,
+    );
+    // useEffect(() => {
+    //   onInputValueChange(inputKey, options[0].value);
+    // }, []);
+    const handleOptionChange = (
+      e: ChangeEvent<HTMLSelectElement, HTMLSelectElement>,
+    ) => {
+      onInputValueChange(inputKey, e.target.value);
+      setOptionSelected(e.target.value);
+    };
     return (
       <select
         className=" text-base px-2 p-1 border-dark-blue rounded-lg bg-light-mode-bg border"
-        onChange={(e) => onInputValueChange(inputKey, e.target.value)}
-        value={existingValue ? existingValue : options[0].value}
+        onChange={handleOptionChange}
+        value={optionSelected}
       >
         {options.map((option: any) => (
           <option key={option.value} value={option.value}>

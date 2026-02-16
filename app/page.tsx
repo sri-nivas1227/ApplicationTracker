@@ -4,15 +4,21 @@ import searchIcon from "@/app/assets/icons/search-icon.svg";
 import CreateApplicationTile from "./components/CreateApplicationTile";
 import { Toaster, toast } from "sonner";
 import ApplicationTile from "./components/ApplicationTile";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import DetailModal from "./components/DetailModal";
+import { getAllApplicationsAction } from "./actions";
 export default function Home() {
   const [showModal, setShowModal] = useState<boolean>();
   const [modalAction, setModalAction] = useState<"create" | "edit" | "view">();
   const [applicationList, setApplicationList] = useState<any>();
   const [selectedApplication, setSelectedApplication] = useState<any>();
   const [userData, setUserData] = useState<any>();
-  console.log(modalAction, showModal, selectedApplication)
+  useEffect(() => {
+    if (!showModal) {
+      const applications = getAllApplicationsAction();
+      setApplicationList(applications);
+    }
+  }, [showModal]);
   return (
     <div className="bg-dark-blue w-full h-full">
       <div className="p-4 flex justify-center items-center">
