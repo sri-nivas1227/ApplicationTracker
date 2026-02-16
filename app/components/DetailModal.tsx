@@ -42,7 +42,14 @@ export default function DetailModal({
       };
     }),
   );
+
+  const resetForm = () => {
+    setSelectedApplication(undefined);
+    setApplicationForm([]);
+  };
+
   const handleModalClose = () => {
+    resetForm();
     setShowModal((prev) => !prev);
   };
   const handleInputChange = (key: string, value: string) => {
@@ -55,25 +62,24 @@ export default function DetailModal({
     setApplicationForm(newForm);
   };
   const handleDeleteApplication = () => {
-    console.log('deleting application');
-    const response = deleteApplicationAction(application["id"])
-    if(response.success){
-      setShowModal(prev=>!prev)
+    console.log("deleting application");
+    const response = deleteApplicationAction(application["id"]);
+    if (response.success) {
+      resetForm();
+      setShowModal((prev) => !prev);
     }
-
-
   };
   const handleSaveApplication = async () => {
     const submitForm: any = {};
-    applicationForm.forEach((obj)=>{
+    applicationForm.forEach((obj) => {
       submitForm[obj.key] = obj.value;
-    })
-    if(application?.id){
+    });
+    if (application?.id) {
       submitForm["id"] = application.id;
     }
     const response = await submitApplicationAction(submitForm);
-    if(response.success){
-      setShowModal((prev)=>!prev)
+    if (response.success) {
+      setShowModal((prev) => !prev);
     }
   };
   return (
@@ -219,7 +225,7 @@ export default function DetailModal({
                 className="p-2 text-lg bg-red-500 text-white w-fit rounded-lg cursor-pointer"
                 onClick={() => {
                   setModalAction(modalAction === "edit" ? "view" : undefined);
-                  if (modalAction === "create") {
+                  if (modalAction != "edit") {
                     handleModalClose();
                   }
                 }}
