@@ -17,14 +17,14 @@ export async function submitApplicationAction(application: Application) {
     ? JSON.parse(applicationsData)
     : [];
 
-  const oldId = applications.at(-1)?.id ?? 0;
+  const oldId = application?.id ?? 0;
   if (oldId !== 0) {
     const idx = applications.findIndex((a: any) => a.id === oldId);
     if (idx !== -1) {
       applications[idx] = { ...application, id: oldId };
     }
   } else {
-    application["id"] = oldId + 1;
+    application.id = applications.length + 1;
     applications.push(application);
   }
   localStorage.setItem("applications", JSON.stringify(applications));
@@ -33,9 +33,7 @@ export async function submitApplicationAction(application: Application) {
 
 export function getAllApplicationsAction() {
   const applicationsData = localStorage.getItem("applications");
-  const applications = applicationsData
-    ? JSON.parse(applicationsData)
-    : [];
+  const applications = applicationsData ? JSON.parse(applicationsData) : [];
   if (applications) {
     return applications;
   } else {
@@ -45,7 +43,9 @@ export function getAllApplicationsAction() {
 
 export function deleteApplicationAction(id: number | undefined) {
   const applicationsData = localStorage.getItem("applications");
-  let applications: any[] = applicationsData ? JSON.parse(applicationsData) : [];
+  let applications: any[] = applicationsData
+    ? JSON.parse(applicationsData)
+    : [];
   applications = applications.filter((application) => {
     return application["id"] != id;
   });
